@@ -1,0 +1,2 @@
+2017.6.9  交叉编译bash 放于开发板中suc,脚本执行成功.
+注意./configure的配置 以及make 的error信息
