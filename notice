@@ -1,3 +1,4 @@
 2017.6.7  TINY 4421的 led 暂只能用led1、2、3、4（0~3）
 2017.6.8  交叉编译bash 放于开发板中suc,脚本执行成功.
 注意./configure的配置 以及make 的error信息
+arm下注意指针的使用 段错误,usefully sprintf!
