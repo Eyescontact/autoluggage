@@ -2,12 +2,15 @@
 led_onoff()
 {
 i=0
-while (($i<5))
+while (($i<4))
 do
-   `led 1 0`
-   sleep 1 
-   `led 1 1`
-   sleep 1 
+   `led $i 0`
+   usleep 300000
+#   `led $i 1`
+ #  usleep 300000 
+   
+let i+=1
+
 done
 }
 
