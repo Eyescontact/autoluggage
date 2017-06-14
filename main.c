@@ -5,7 +5,7 @@ xzy  2017.6.9  code for autoluggage pratical trianing
 #include <pthread.h>
 #include <string.h>
 #include "led.h"
-
+#include "get_location_msg.h"
 #define open  1
 #define state 0
 #if open
@@ -93,7 +93,7 @@ void thread_create(void)
   int res[2];
   memset(&thread1, 0, sizeof(thread1));
   memset(&thread2, 0, sizeof(thread2));
-  res[1] = pthread_create(&thread1,NULL,pthread1,NULL);
+  res[1] = pthread_create(&thread1,NULL,(void *)get_LocationMsg,NULL);
   res[2] = pthread_create(&thread2,NULL,(void *)led_state,NULL);
 
   if(res[1] >= 0)

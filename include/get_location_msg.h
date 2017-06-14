@@ -7,3 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
+
+int uart_device_open(void);
+void get_LocationMsg(void);

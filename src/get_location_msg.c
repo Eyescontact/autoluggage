@@ -2,7 +2,7 @@
 
 int fd;
 
-int uart_device_open()
+int uart_device_open(void)
 {
 	struct termios options;
 	
@@ -34,7 +34,7 @@ int uart_device_open()
 
 
 
-int main(int argc, const char *argv[])
+void get_LocationMsg(void)
 {
 	long i;
 	int j;
@@ -95,6 +95,6 @@ int main(int argc, const char *argv[])
 		}	
 	}		
 	close(fd);
-	return 0; 
+	 
 }
 

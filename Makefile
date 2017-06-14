@@ -1,12 +1,26 @@
 TARGET = autoluggage
 
+INCLUDE_DIRS = -I ~/github/autoluggage/include
+INCLUDE = ~/github/autoluggage/include/
+SRC = ~/github/autoluggage/src/
+
 CXX = arm-linux-gcc
+CXXFLAGS += $(INCLUDE_DIRS) 
+LFLAGS += -lpthread  
+DEPEND += led.o get_location_msg.o 
 
 all:$(TARGET)
 
-$(TARGET):led.o main.c
-	$(CXX) -o $(TARGET) led.o main.c -lpthread
-led.o:led.c led.h
-	$(CXX) -c led.c  
+$(TARGET):$(DEPEND) main.c
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(DEPEND) main.c $(LFLAGS)
+led.o:$(SRC)led.c $(INCLUDE)led.h
+	$(CXX) $(CXXFLAGS) -c $(SRC)led.c  
+
+get_location_msg.o:$(SRC)get_location_msg.c $(INCLUDE)get_location_msg.h
+	$(CXX) $(CXXFLAGS) -c $(SRC)get_location_msg.c
+
+serial:$(SRC)Serial.c $(INCLUDE)Serial.h
+	$(CXX) $(CXXFLAGS) -o serial $(SRC)Serial.c 
+
 clean:
-	rm -f *.a *.o $(TARGET) 
+	rm -f *.a *.o $(TARGET) serial
