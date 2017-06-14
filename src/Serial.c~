@@ -3,7 +3,7 @@
 
 struct  termios Opt;
 char  *send_buffer = "ATssssssss";
-char  recv_buffer[3];
+char  recv_buffer[15];
 int   sByte; 
 int   rByte = 0;
 
@@ -62,7 +62,6 @@ void serial_setinit(void)
   
   /*以读写方式打开串口*/
   system("echo '258708' | sudo chmod 777 /dev/ttyUSB0");
-  // system("chmod 777 /dev/ttyUSB0");
   Serial_fd = open("/dev/ttyUSB0", O_RDWR|O_NOCTTY|O_NDELAY);
   if (Serial_fd < 0)
     {/* 不能打开串口一*/
@@ -79,7 +78,7 @@ void serial_setinit(void)
   Opt.c_iflag |= IGNPAR;
   Opt.c_iflag &= ~(BRKINT | INPCK | ISTRIP | ICRNL | IXON);		    
 
-  Opt.c_cc[VMIN] = 2;        
+  Opt.c_cc[VMIN] = 8;        
   Opt.c_oflag = 0;
   Opt.c_lflag = 0;
   cfsetispeed(&Opt, 9600);

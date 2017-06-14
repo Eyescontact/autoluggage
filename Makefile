@@ -4,6 +4,7 @@ INCLUDE_DIRS = -I ~/github/autoluggage/include
 INCLUDE = ~/github/autoluggage/include/
 SRC = ~/github/autoluggage/src/
 
+CCC = gcc
 CXX = arm-linux-gcc
 CXXFLAGS += $(INCLUDE_DIRS) 
 LFLAGS += -lpthread  
@@ -20,7 +21,7 @@ get_location_msg.o:$(SRC)get_location_msg.c $(INCLUDE)get_location_msg.h
 	$(CXX) $(CXXFLAGS) -c $(SRC)get_location_msg.c
 
 serial:$(SRC)Serial.c $(INCLUDE)Serial.h
-	$(CXX) $(CXXFLAGS) -o serial $(SRC)Serial.c 
+	$(CCC) $(CXXFLAGS) -o serial $(SRC)Serial.c 
 
 clean:
 	rm -f *.a *.o $(TARGET) serial
