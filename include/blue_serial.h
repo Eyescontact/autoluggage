@@ -9,3 +9,7 @@
 #include     <string.h>
 
 #define  send  0
+
+void serial_setinit(void);
+void blue_serial(void);
+
