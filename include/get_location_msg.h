@@ -10,5 +10,5 @@
 
 #define  send  0
 
-void  serial_setinit(void);
-void  get_location_msg(void)；
+void  serial_init(void);
+void  get_LocationMsg(void);

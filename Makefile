@@ -4,16 +4,13 @@ INCLUDE_DIRS = -I ~/github/autoluggage/include
 INCLUDE = ~/github/autoluggage/include/
 SRC = ~/github/autoluggage/src/
 
-
-CCC = gcc
-CXX = arm-linux-gcc
-
 CCC = gcc
 CXX = arm-linux-gcc
 
 CXXFLAGS += $(INCLUDE_DIRS) 
 LFLAGS += -lpthread  
 DEPEND += led.o get_location_msg.o blue_serial.o get_weight.o 
+DEPAND += blue_serial.o
 
 all:$(TARGET)
 

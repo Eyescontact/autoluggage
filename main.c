@@ -20,12 +20,19 @@ extern volatile unsigned int blue_command;
 extern enum led_mode{zero_mode,one_mode,two_mode,three_mode} led_no;
 pthread_t led_thread,bluethoot_thread,location_thread,weigh_thread;
 //状态 也为控制灯的状态
-unsigned short int     identity_state        = 1;    
-unsigned short int     blue_state            = 1;
-unsigned short int     get_location_state    = 1;
-unsigned short int     get_weight_state      = 1;
+unsigned short int     identity_state        = 0;    
+unsigned short int     blue_state            = 0;
+unsigned short int     get_location_state    = 0;
+unsigned short int     get_weight_state      = 0;
+
+unsigned short int     Last_identity_state        = 0;    
+unsigned short int     Last_blue_state            = 0;
+unsigned short int     Last_get_location_state    = 0;
+unsigned short int     Last_get_weight_state      = 0;
+
 /*创建几个模块的线程*/
 void thread_create(void);
+void check_StateChange(void);
 
 /* thread try 
 void *pthread1()
@@ -60,7 +67,8 @@ int main ()
   
   while(1)
   { 
-
+    
+    //check_StateChange();
 #if state 
     //blue_state += 1;
     //sleep(1);
@@ -147,5 +155,39 @@ void thread_create(void)
       perror("create weigh_thread failed!");
       exit(1);
     }  
+}
+
+void check_StateChange(void)
+{
+  if(Last_get_weight_state != get_weight_state || Last_get_location_state != get_location_state || Last_identity_state != identity_state || Last_blue_state != blue_state)
+    { 
+      int res_ok,res_join,res_led;
+      void *thread_res;
+      res_ok = pthread_cancel(led_thread);
+      if(res_ok != 0)
+	{
+	  perror("cancel led_thread");
+	  exit(1);
+	}
+      printf("Waiting for thread to finish...\n"); 
+      
+      res_join = pthread_join(led_thread,&thread_res);
+      if(0 != res_join){  
+        perror("thread join failed!");  
+        exit(EXIT_FAILURE);  
+      }  
+      memset(&led_thread       , 0, sizeof(led_thread));
+      
+      res_led = pthread_create(&led_thread       ,NULL,(void *)led_state,NULL);
+      if(res_led >= 0)
+	{
+	  printf("create led_thread suc!\n");
+	}
+      else
+	{
+	  perror("create led_thread failed!");
+	  exit(1);
+	}
+    }
 }
 #endif
