@@ -1,12 +1,14 @@
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <termios.h>
-#include <stdlib.h>
-#include <string.h>
-#include <strings.h>
+#include     <stdio.h>      /*标准输入输出定义*/
+#include     <stdlib.h>     /*标准函数库定义*/
+#include     <unistd.h>     /*Unix 标准函数定义*/
+#include     <sys/types.h>  /*数据类型，比如一些XXX_t的那种的结构，没看明白*/
+#include     <sys/stat.h>   /*定义了一些返回值*/
+#include     <fcntl.h>      /*文件控制定义*/
+#include     <termios.h>    /*PPSIX 终端控制定义*/
+#include     <errno.h>      /*错误号定义*/
+#include     <string.h>
 
-int uart_device_open(void);
-void get_LocationMsg(void);
+#define  send  0
+
+void  serial_setinit(void);
+void  get_location_msg(void)；
