@@ -159,18 +159,13 @@ void thread_create(void)
 
 void check_StateChange(void)
 {
-  // printf("%d %d %d %d\n",get_weight_state,get_location_state,identity_state, blue_state);
+   printf("%d %d %d %d\n",get_weight_state,get_location_state,identity_state, blue_state);
   if(Last_get_weight_state != get_weight_state || Last_get_location_state != get_location_state || Last_identity_state != identity_state || Last_blue_state != blue_state)
     { 
       int res_ok,res_join,res_led;
       void *thread_res;
      
       printf("led change!\n");
-      Last_get_weight_state = get_weight_state;
-      Last_get_location_state = get_location_state; 
-      Last_identity_state = identity_state;
-      Last_blue_state = blue_state;
-
       res_ok = pthread_cancel(led_thread);
       if(res_ok != 0)
 	{

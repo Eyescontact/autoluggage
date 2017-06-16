@@ -17,7 +17,7 @@ void led_state()
     {
       int res;
       sprintf(dir_sh,"%s %d %d %d %d",dir,blue_state,identity_state,get_weight_state,get_location_state);
-      printf("%s",dir_sh);
+      printf("%s\n",dir_sh);
       
       res =  pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
       if(0 != res){  

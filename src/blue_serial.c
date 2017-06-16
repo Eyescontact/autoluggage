@@ -9,7 +9,7 @@ int   rByte = 0;
 
 volatile int  blue_command = 0;
 
-int Serial_fd;
+int blue_fd;
 
 void blue_serial(void)
 {
@@ -18,14 +18,14 @@ void blue_serial(void)
   //recv_buffer = (char *)malloc(sizeof(char));
   tv.tv_sec=30;
   tv.tv_usec=0;
-  serial_setinit();
+  serial_blueinit();
 
-  printf("waiting...\n");
+  printf("blue waiting...\n");
   while(1)
     {
      
       FD_ZERO(&rfds);
-      FD_SET(Serial_fd, &rfds);
+      FD_SET(blue_fd, &rfds);
       //sleep(1);
 #if send
       //bzero(recv_buffer,0);
@@ -36,11 +36,11 @@ void blue_serial(void)
       	}
 #endif
       //sleep(1);
-      if (select(1+Serial_fd, &rfds, NULL, NULL, &tv)>0)
+      if (select(1+blue_fd, &rfds, NULL, NULL, &tv)>0)
 	{
-	  if (FD_ISSET(Serial_fd, &rfds))
+	  if (FD_ISSET(blue_fd, &rfds))
 	    {
-	      rByte = read(Serial_fd,recv_buffer,sizeof(recv_buffer));
+	      rByte = read(blue_fd,recv_buffer,sizeof(recv_buffer));
 	   
 	      if(rByte < 0)
 		{
@@ -92,20 +92,20 @@ void blue_serial(void)
   
 }
 
-void serial_setinit(void)
+void serial_blueinit(void)
 {
   
   /*以读写方式打开串口*/
   //system("echo '258708' | sudo chmod 777 /dev/ttyUSB0");
    system("chmod 777 /dev/ttyUSB0");
-  Serial_fd = open("/dev/ttyUSB0", O_RDWR|O_NOCTTY|O_NDELAY);
-  if (Serial_fd < 0)
+   blue_fd = open("/dev/ttyUSB0", O_RDWR|O_NOCTTY); //|O_NDELAY
+  if (blue_fd < 0)
     {/* 不能打开串口一*/
-      perror("Serial open");
+      perror("blue Serial open");
       exit(1);
     }
    bzero(&Opt, sizeof(struct termios)); /* clear struct for new port settings */
-   tcgetattr(Serial_fd, &Opt);
+   tcgetattr(blue_fd, &Opt);
   Opt.c_cflag |= (CLOCAL | CREAD);
   Opt.c_cflag &= ~CSIZE;
   Opt.c_cflag &= ~CRTSCTS;
@@ -114,12 +114,13 @@ void serial_setinit(void)
   Opt.c_iflag |= IGNPAR;
   Opt.c_iflag &= ~(BRKINT | INPCK | ISTRIP | ICRNL | IXON);		    
 
-  Opt.c_cc[VMIN] = 2;       //每次接受最小位数 
+  Opt.c_cc[VMIN]  = 2;       //每次接受最小位数 
+  Opt.c_cc[VTIME] = 0;
   Opt.c_oflag = 0;
   Opt.c_lflag = 0;
   cfsetispeed(&Opt, 9600);
   cfsetospeed(&Opt, 9600);          
-  tcsetattr(Serial_fd,TCSANOW,&Opt);
+  tcsetattr(blue_fd,TCSANOW,&Opt);
 
-  printf("Serial open suc!\n");
+  printf("blue Serial open suc!\n");
 }

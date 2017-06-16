@@ -8,7 +8,7 @@ char  recv_buffer[512];
 int   Byte = 0;
 
 int Serial_fd;
-
+extern unsigned short int     get_location_state;
 
 void  get_LocationMsg(void)
 {
@@ -29,9 +29,9 @@ void  get_LocationMsg(void)
   tv.tv_sec=30;
   tv.tv_usec=0;
 
-  serial_setinit();
+  serial_init();
 
-  printf("waiting...\n");
+  printf("location waiting...\n");
   while(1)
     {
      
@@ -55,10 +55,12 @@ void  get_LocationMsg(void)
 	      if(Byte < 0)
 		{
 		  perror("read");
+		  get_location_state = 0;
 		  exit(1);
 		}
 	      else if(Byte > 0)
 		{
+		  get_location_state = 1;
 		  strcat(fd2,recv_buffer);
 		  //printf("fd2:%s\n",fd2);
 		  while((buf=strstr(fd2,"$GPRMC"))!=NULL&&strstr(buf,"\n")!=NULL)
@@ -90,22 +92,27 @@ void  get_LocationMsg(void)
 		      lat_v=atof(lat_value);
 		      lon_v=atof(lon_value);
                                 
-		      if(lat_v!=lat_v_flag&&lon_v!=lon_v_flag)
-			{
+		      //if(lat_v!=lat_v_flag&&lon_v!=lon_v_flag)
+			
+			  sleep(1);
 			  lat_v_flag=lat_v;
 			  lon_v_flag=lon_v;
 			  printf("E:%f\tN:%f\n",lat_v,lon_v);
-			  break;
+			  // break;
 			  bzero(fd2,sizeof(fd2));
 			  bzero(a,sizeof(a)); 
-			}
+			
 		    }
 			
 		}  
 	    }
 	}  
-    }
- 
+      if(sizeof(fd2) > 1000)
+     	{
+	  bzero(fd2,sizeof(fd2));
+      	}
+    }//while 
+  get_location_state = 0;
 }
 
 void serial_init(void)
@@ -113,11 +120,11 @@ void serial_init(void)
   
   /*以读写方式打开串口*/
   //system("echo '1' | sudo chmod 777 /dev/ttyUSB0");
-  system("chmod 777 /dev/ttySCA0");
-  Serial_fd = open("/dev/ttySCA0", O_RDWR|O_NOCTTY|O_NDELAY);
+  system("chmod 777 /dev/ttyUSB1");
+  Serial_fd = open("/dev/ttyUSB1", O_RDWR|O_NOCTTY); //|O_NDELAY
   if (Serial_fd < 0)
     {/* 不能打开串口一*/ 
-      perror("Serial open");
+      perror("SCA Serial open");
       exit(1);
     }
    bzero(&Opt, sizeof(struct termios)); /* clear struct for new port settings */
@@ -130,12 +137,14 @@ void serial_init(void)
   Opt.c_iflag |= IGNPAR;
   Opt.c_iflag &= ~(BRKINT | INPCK | ISTRIP | ICRNL | IXON);		    
 
-  Opt.c_cc[VMIN] = 8;        
+  Opt.c_cc[VMIN] = 8;  
+  Opt.c_cc[VTIME] = 0; 
+
   Opt.c_oflag = 0;
   Opt.c_lflag = 0;
   cfsetispeed(&Opt, 9600);
   cfsetospeed(&Opt, 9600);          
   tcsetattr(Serial_fd,TCSANOW,&Opt);
 
-  printf("Serial open suc!\n");
+  printf("location Serial open suc!\n");
 }
