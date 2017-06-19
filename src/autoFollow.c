@@ -1,25 +1,9 @@
-#include <stdio.h>
-#include <math.c>
+#include "autoFollow.h"
 
-#define PI 3.141592653
-#define dutorad(X) ((X)/180*PI)
-#define radtodu(X) ((X)/PI*180)
-
-double getGestGps();
-double getHostGps();
-double compaireDistance();
-void move();
-double calculateAngle();
-int main(){
-getHostGps();
-getGestGps();
-
-while(1){
-	if((double distance = compaireDistance()) >= 2.5){
-		move();
-	}
-	
-}
+extern volatile  int  lug_location_msg_lon;
+extern volatile  int  lug_location_msg_lat;
+extern volatile  int  own_location_msg_lon;
+extern volatile  int  own_location_msg_lat;
 
 typedef struct  getHostGps{
 	h_lon = ;
@@ -27,9 +11,25 @@ typedef struct  getHostGps{
 
 }*hostGps;
 typedef struct  getGestGps{
-	g_lon = ;
-	g_lat = ;	
+	g_lon = lug_location_msg_lon;
+	g_lat = lug_location_msg_lat;	
 }*gestGps;
+
+void autoFollow(void)
+{
+  getHostGps();
+  getGestGps();
+
+  while(1)
+    {
+      if((double distance = compaireDistance()) >= 2.5)
+	{
+	  move();
+	}
+	
+    }
+}
+
 
 double getHostGps(){
 

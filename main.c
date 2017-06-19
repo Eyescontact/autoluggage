@@ -12,13 +12,16 @@ xzy  2017.6.9  code for autoluggage pratical trianing
 #define open  1
 #define state 0
 #if open
-volatile unsigned int  lug_location_msg;
-volatile unsigned int  own_location_msg;
+volatile  double  lug_location_msg_lon = 0;
+volatile  double  lug_location_msg_lat = 0;
+volatile  double  own_location_msg_lon = 0;
+volatile  double  own_location_msg_lat = 0;
 
 extern volatile unsigned int blue_command;
 
 extern enum led_mode{zero_mode,one_mode,two_mode,three_mode} led_no;
-pthread_t led_thread,bluethoot_thread,location_thread,weigh_thread;
+
+pthread_t led_thread,bluethoot_thread,location_thread,weigh_thread,follow_thread;
 //状态 也为控制灯的状态
 unsigned short int     identity_state        = 0;    
 unsigned short int     blue_state            = 0;
@@ -105,16 +108,18 @@ return 0;
 #if open
 void thread_create(void)
 {
-  int res[4];
+  int res[5];
   memset(&location_thread  , 0, sizeof(location_thread));
   memset(&led_thread       , 0, sizeof(led_thread));
   memset(&bluethoot_thread , 0, sizeof(bluethoot_thread));
   memset(&weigh_thread     , 0, sizeof(weigh_thread));
+  // memset(&follow_thread     , 0, sizeof(follow_thread));
   
   res[1] = pthread_create(&location_thread  ,NULL,(void *)get_LocationMsg,NULL);
   res[2] = pthread_create(&led_thread       ,NULL,(void *)led_state,NULL);
   res[3] = pthread_create(&bluethoot_thread ,NULL,(void *)blue_serial,NULL);
   res[4] = pthread_create(&weigh_thread     ,NULL,(void *)get_weight,NULL);  
+  // res[5] = pthread_create(&follow_thread    ,NULL,(void *)autoFollow,NULL); 
 
   if(res[1] >= 0)
     {
@@ -155,6 +160,16 @@ void thread_create(void)
       perror("create weigh_thread failed!");
       exit(1);
     }  
+
+  /* if(res[5] >= 0)
+    {
+      printf("create follow_thread suc!\n");
+    }
+  else
+    {
+      perror("create follow_thread failed!");
+      exit(1);
+      }  */
 }
 
 void check_StateChange(void)

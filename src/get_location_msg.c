@@ -8,6 +8,12 @@ char  recv_buffer[512];
 int   Byte = 0;
 
 int Serial_fd;
+
+extern volatile  double  lug_location_msg_lon ;
+extern volatile  double  lug_location_msg_lat ;
+extern volatile  double  own_location_msg_lon ;
+extern volatile  double  own_location_msg_lat ;
+
 extern unsigned short int     get_location_state;
 
 void  get_LocationMsg(void)
@@ -16,10 +22,12 @@ void  get_LocationMsg(void)
   char fd2[1024];
   char a[1024];
   char* buf=a;
-  float lat_v;
-  float lon_v;
-  float lat_v_flag=0;
-  float lon_v_flag=0;
+  
+  double lat_v;
+  double lon_v;
+  double lat_v_flag=0;
+  double lon_v_flag=0;
+  
   char lat_value[10];
   char lon_value[10];
 
@@ -95,13 +103,14 @@ void  get_LocationMsg(void)
 		      //if(lat_v!=lat_v_flag&&lon_v!=lon_v_flag)
 			
 			  sleep(1);
-			  lat_v_flag=lat_v;
-			  lon_v_flag=lon_v;
-			  printf("E:%f\tN:%f\n",lat_v,lon_v);
-			  // break;
+			  lat_v_flag=lat_v;  //纬
+			  lon_v_flag=lon_v;  //经
+			  printf("E:%lf\tN:%lf\n",lat_v,lon_v);
+			  lug_location_msg_lon = (double)lon_v;
+			  lug_location_msg_lat = (double)lat_v;
 			  bzero(fd2,sizeof(fd2));
 			  bzero(a,sizeof(a)); 
-			
+			  break;
 		    }
 			
 		}  
