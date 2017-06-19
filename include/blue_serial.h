@@ -9,6 +9,13 @@
 #include     <string.h>
 
 #define  send  0
+#define  command_ahead        "01"
+#define  command_back         "02"
+#define  command_left         "03"
+#define  command_right        "04"
+#define  command_stop         "00"
+#define  command_location     "05"
+#define  command_exit         "ff"
 
 void serial_blueinit(void);
 void blue_serial(void);

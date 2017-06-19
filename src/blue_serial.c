@@ -9,6 +9,9 @@ int   rByte = 0;
 
 volatile int  blue_command = 0;
 
+extern volatile  double  lug_location_msg_lon ;
+extern volatile  double  lug_location_msg_lat ;
+
 int blue_fd;
 
 void blue_serial(void)
@@ -52,30 +55,36 @@ void blue_serial(void)
     	          printf("LEN:%d\n",rByte);
 		  recv_buffer[rByte] = '\0';
 		  printf("buff:%s\n",recv_buffer); 
-		  if(strcmp(recv_buffer,"01") == 0)
+		  if(strcmp(recv_buffer,command_ahead) == 0)
 	     	  {
 			blue_command = 1;
 			printf("ahead !\n");
 		  }
-		  if(strcmp(recv_buffer,"02") == 0)
+		  if(strcmp(recv_buffer,command_back) == 0)
                   {  	
 			blue_command = 2;
 		        printf("back !\n");
 		  }
-		  if(strcmp(recv_buffer,"03") == 0)
+		  if(strcmp(recv_buffer,command_left) == 0)
                   { 
 			blue_command = 3;
 		        printf("left !\n");
 		  }
-		  if(strcmp(recv_buffer,"04") == 0)
+		  if(strcmp(recv_buffer,command_right) == 0)
                   {
 			blue_command = 4;
 		        printf("right !\n");
 		  } 
-		  if(strcmp(recv_buffer,"00") == 0)
+		  if(strcmp(recv_buffer,command_stop) == 0)
                   {  
 			blue_command = 0;
 		        printf("stop !\n");
+		  }
+		  if(strcmp(recv_buffer,command_location) == 0)
+		  {  
+			blue_command = 5;
+		        printf("get location !\n");
+			printf("luglocation:%lf,%lf",lug_location_msg_lat,lug_location_msg_lon);
 		  }
 #if switch
 		switch(blue_command)
