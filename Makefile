@@ -8,8 +8,8 @@ CCC = gcc
 CXX = arm-linux-gcc
 
 CXXFLAGS += $(INCLUDE_DIRS) 
-LFLAGS += -lpthread  
-DEPEND += led.o get_location_msg.o blue_serial.o get_weight.o 
+LFLAGS += -lpthread -lm
+DEPEND += led.o get_location_msg.o blue_serial.o get_weight.o autoFollow.o
 DEPAND += blue_serial.o
 
 all:$(TARGET)
@@ -22,6 +22,8 @@ led.o:$(SRC)led.c $(INCLUDE)led.h
 get_location_msg.o:$(SRC)get_location_msg.c $(INCLUDE)get_location_msg.h
 	$(CXX) $(CXXFLAGS) -c $(SRC)get_location_msg.c
 
+autoFollow.o:$(SRC)autoFollow.c $(INCLUDE)autoFollow.h
+	$(CXX) $(CXXFLAGS) -c $(SRC)autoFollow.c
 
 blue_serial.o:$(SRC)blue_serial.c $(INCLUDE)blue_serial.h
 	$(CXX) $(CXXFLAGS) -c $(SRC)blue_serial.c

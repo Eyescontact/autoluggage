@@ -8,7 +8,7 @@ xzy  2017.6.9  code for autoluggage pratical trianing
 #include "get_location_msg.h"
 #include "blue_serial.h"
 #include "get_weight.h"
-
+#include "autoFollow.h"
 #define open  1
 #define state 0
 #if open
@@ -113,13 +113,13 @@ void thread_create(void)
   memset(&led_thread       , 0, sizeof(led_thread));
   memset(&bluethoot_thread , 0, sizeof(bluethoot_thread));
   memset(&weigh_thread     , 0, sizeof(weigh_thread));
-  // memset(&follow_thread     , 0, sizeof(follow_thread));
+  memset(&follow_thread    , 0, sizeof(follow_thread));
   
   res[1] = pthread_create(&location_thread  ,NULL,(void *)get_LocationMsg,NULL);
   res[2] = pthread_create(&led_thread       ,NULL,(void *)led_state,NULL);
   res[3] = pthread_create(&bluethoot_thread ,NULL,(void *)blue_serial,NULL);
   res[4] = pthread_create(&weigh_thread     ,NULL,(void *)get_weight,NULL);  
-  // res[5] = pthread_create(&follow_thread    ,NULL,(void *)autoFollow,NULL); 
+  res[5] = pthread_create(&follow_thread    ,NULL,(void *)autoFollow,NULL); 
 
   if(res[1] >= 0)
     {
@@ -161,7 +161,7 @@ void thread_create(void)
       exit(1);
     }  
 
-  /* if(res[5] >= 0)
+   if(res[5] >= 0)
     {
       printf("create follow_thread suc!\n");
     }
@@ -169,7 +169,7 @@ void thread_create(void)
     {
       perror("create follow_thread failed!");
       exit(1);
-      }  */
+      }  
 }
 
 void check_StateChange(void)

@@ -1,15 +1,16 @@
 #include <stdio.h>
-#include <math.c>
+#include <math.h>
 
 #define PI 3.141592653
 #define dutorad(X) ((X)/180*PI)
 #define radtodu(X) ((X)/PI*180)
 
-double getGestGps();
-double getHostGps();
+double getGestGps(void);
+double getHostGps(void);
 
-double compaireDistance();
-double calculateAngle();
+double compaireDistance(void);
+double calculateAngle(void);
 
-void move();
+void autoFollow(void);
+void move(void);
 
