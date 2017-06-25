@@ -2,28 +2,28 @@
 #include  "blue_serial.h"
 
 struct  termios Opt;
-char  *send_buffer = "ATssssssss";
+char  *send_buffer = "01";
 char  recv_buffer[3];
 int   sByte; 
 int   rByte = 0;
 
 static int fd = -1;
 
-volatile int  blue_command = 0;
+//volatile int  blue_command = 0;
 
-extern volatile  double  lug_location_msg_lon ;
-extern volatile  double  lug_location_msg_lat ;
+//extern volatile  double  lug_location_msg_lon ;
+//extern volatile  double  lug_location_msg_lat ;
 
 int blue_fd;
 int buzzer_state = 0;
 
-void blue_serial(void)
+void main(void)
 {
-  int freq = 5 ;
+  int freq = 10 ;
   struct timeval tv;
   fd_set rfds;
   //recv_buffer = (char *)malloc(sizeof(char));
-  tv.tv_sec=20;
+  tv.tv_sec=5;
   tv.tv_usec=0;
   serial_blueinit();
 
@@ -43,9 +43,10 @@ void blue_serial(void)
 		
 		}
       //	printf("bulue?\n");
-#if send
+#if 1
+    sleep(1);
       //bzero(recv_buffer,0);
-      if(write(Serial_fd,send_buffer,strlen(send_buffer)) > 0)
+      if(write(blue_fd,send_buffer,strlen(send_buffer)) > 0)
       	{
       	  printf("write suc!\n");
 	 
@@ -76,45 +77,13 @@ void blue_serial(void)
     	          printf("LEN:%d\n",rByte);
 		  recv_buffer[rByte] = '\0';
 		  printf("buff:%s\n",recv_buffer); 
-		  if(strcmp(recv_buffer,command_ahead) == 0)
-	     	  {
-			blue_command = 1;
-			printf("ahead !\n");
-		  }
-		  if(strcmp(recv_buffer,command_back) == 0)
-                  {  	
-			blue_command = 2;
-		        printf("back !\n");
-		  }
-		  if(strcmp(recv_buffer,command_left) == 0)
-                  { 
-			blue_command = 3;
-		        printf("left !\n");
-		  }
-		  if(strcmp(recv_buffer,command_right) == 0)
-                  {
-			blue_command = 4;
-		        printf("right !\n");
-		  } 
-		  if(strcmp(recv_buffer,command_stop) == 0)
-                  {  
-			blue_command = 0;
-		        printf("stop !\n");
-		  }
-		  if(strcmp(recv_buffer,command_location) == 0)
-		  {  
-			blue_command = 5;
-		        printf("get location !\n");
-			printf("luglocation:%lf,%lf",lug_location_msg_lat,lug_location_msg_lon);
-		  }
-#if switch
-		switch(blue_command)
-		{
-		  case  1:
-			printf("go ahead!\n");
-			break;
-		}     	     
-#endif
+
+		  /*	  if(strcmp(recv_buffer,command_location) == 0)
+			  {  
+			  blue_command = 5;
+			  printf("get location !\n");
+			  printf("luglocation:%lf,%lf",lug_location_msg_lat,lug_location_msg_lon);
+			  }*/
 		}  
 	    }
 	}
@@ -169,7 +138,7 @@ void serial_blueinit(void)
 {
   
   /*以读写方式打开串口*/
-  //system("echo '258708' | sudo chmod 777 /dev/ttyUSB0");
+ // system("echo '258708' | sudo chmod 777 /dev/ttyUSB0");
    system("chmod 777 /dev/ttyUSB0");
    blue_fd = open("/dev/ttyUSB0", O_RDWR|O_NOCTTY); //|O_NDELAY
   if (blue_fd < 0)

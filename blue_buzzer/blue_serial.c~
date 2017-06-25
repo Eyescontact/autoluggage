@@ -37,12 +37,11 @@ void blue_serial(void)
       FD_ZERO(&rfds);
       FD_SET(blue_fd, &rfds);
       //sleep(1);
-      if(buzzer_state == 2)
-	{
-	  set_buzzer_freq(freq);
-	  sleep(3);
-	  stop_buzzer(); 
-	}
+	      if(buzzer_state == 2)
+		{
+		  set_buzzer_freq(freq);
+		
+		}
       //	printf("bulue?\n");
 #if send
       //bzero(recv_buffer,0);
@@ -55,9 +54,6 @@ void blue_serial(void)
       //sleep(1);
       if (select(1+blue_fd, &rfds, NULL, NULL, &tv)>0)
 	{
-
-	  if( buzzer_state == 2)
-	    buzzer_state = 0;
 
 	  if (FD_ISSET(blue_fd, &rfds))
 	    {
@@ -72,7 +68,11 @@ void blue_serial(void)
 		{ 
 		  if( buzzer_state == 0)
 		    buzzer_state = 1;
-
+		  if( buzzer_state == 2)
+		    {
+		      buzzer_state = 0;
+		      stop_buzzer();
+		    }
     	          printf("LEN:%d\n",rByte);
 		  recv_buffer[rByte] = '\0';
 		  printf("buff:%s\n",recv_buffer); 

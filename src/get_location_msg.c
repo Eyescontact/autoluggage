@@ -134,7 +134,7 @@ void serial_init(void)
   if (Serial_fd < 0)
     {/* 不能打开串口一*/ 
       perror("SCA Serial open");
-      exit(1);
+      // exit(1);
     }
    bzero(&Opt, sizeof(struct termios)); /* clear struct for new port settings */
    tcgetattr(Serial_fd, &Opt);
