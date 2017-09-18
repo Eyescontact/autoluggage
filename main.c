@@ -33,10 +33,13 @@ unsigned short int     Last_blue_state            = 0;
 unsigned short int     Last_get_location_state    = 0;
 unsigned short int     Last_get_weight_state      = 0;
 
+unsigned short int     id_yes = 1;
+unsigned short int     motor_on = 1;
+
 /*创建几个模块的线程*/
 void thread_create(void);
 void check_StateChange(void);
-
+void id_identity(void);
 /* thread try 
 void *pthread1()
 {
@@ -46,16 +49,7 @@ void *pthread1()
       sleep(1);
     }
 }
-
-void *pthread2()
-{
-  
-}
-
-void *pthread3()
-{
-  
-}*/
+*/
 #endif
 
 
@@ -79,14 +73,7 @@ int main ()
       {
 	switch()
 	  {
-	  case :
-	    led_no
-	  case :
-
-	  case :
-
-	  }
-	
+	  }	
       }
 
     if(get_location_state == 1) //user ask for location msg
@@ -170,6 +157,14 @@ void thread_create(void)
       perror("create follow_thread failed!");
       exit(1);
       }  
+}
+
+void id_identity(void)
+{
+  if(id_yes == 0)
+    motor_on == 0;
+  else
+    motor_on == 1;
 }
 
 void check_StateChange(void)
